@@ -132,7 +132,7 @@ def ungeometrize_shapes(shapes_g: gpd.GeoDataFrame) -> pd.DataFrame:
 
 def get_shapes(
     feed: "Feed", *, as_gdf: bool = False, use_utm: bool = False
-) -> gpd.DataFrame | None:
+) -> pd.DataFrame | gpd.GeoDataFrame | None:
     """
     Get the shapes DataFrame for the given feed, which could be ``None``.
     If ``as_gdf``, then return it as GeoDataFrame with a 'geometry' column
@@ -141,6 +141,18 @@ def get_shapes(
     The GeoDataFrame will have a UTM CRS if ``use_utm``; otherwise it will have a
     WGS84 CRS.
     """
+
+    # For simplicity, and for intuitiveness, you may want to consider maybe
+    # returning empty dataframes and geodataframes if 'None' for this and
+    # other 'get dataframe'-type commands. Would be a case of when reading in
+    # the subfiles, setting the parameters to be empty dataframes instead of
+    # None objects. Then you would:
+    #
+    # f = feed.shapes
+    # if not f.empty and as_gdf:
+    #     f = geometrize_shapes(f, use_utm=use_utm)
+    # return f
+
     f = feed.shapes
     if f is not None and as_gdf:
         f = geometrize_shapes(f, use_utm=use_utm)
